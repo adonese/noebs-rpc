@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.rate";
+option java_outer_classname = "RateProto";
+option go_package = "github.com/adonese/noebs-rpc;noebs_rpc";
+
+package noebs_rpc;
+
+// working key service
+service PaymentAPI {
+  // Sends a greeting
+  rpc GetWorkingKey(Request) returns (Response) {}
+  rpc GetPurchase(PurchaseRequest) returns (Response) {}
+  rpc GetSpecialPayment(SpecialPaymentRequest) returns (Response) {}
+}
+
+message Request {
+  string TranDateTime = 1;
+  string TerminalID = 2;
+  string ClientID = 3;
+  int32 STAN = 4;
+}
+
+
+message PurchaseRequest {
+  string TranDateTime = 1;
+  string TerminalID = 2;
+  string ClientID = 3;
+  int32 STAN = 4;
+  string Pan = 5;
+  string Expdate = 6;
+  string Pin = 7;
+  string Currency = 8;
+  float Amount = 9;
+}
+
+message SpecialPaymentRequest {
+  string TranDateTime = 1;
+  string UUID = 2;
+  string ApplicationID = 3;
+  string Pan = 4;
+  string Expdate = 5;
+  string IPin = 6;
+  string Currency = 8;
+  float Amount = 9;
+  string BillerID = 10;
+}
+
+// The response message containing the greetings
+message Response {
+  string WorkingKey = 1;
+  int32 ResponseCode = 2;
+  string ResponseMessage = 3;
+}
+

@@ -3,9 +3,9 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "io.grpc.rate";
 option java_outer_classname = "RateProto";
-option go_package = "github.com/adonese/noebs-rpc;noebs_rpc";
+option go_package = "github.com/adonese/noebs-rpc;noebs";
 
-package noebs_rpc;
+package noebs;
 
 // working key service
 service PaymentAPI {

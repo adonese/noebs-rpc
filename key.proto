@@ -14,6 +14,7 @@ service PaymentAPI {
   rpc GetPurchase(PurchaseRequest) returns (Response) {}
   rpc GetSpecialPayment(SpecialPaymentRequest) returns (Response) {}
   rpc GetConsumerKey(ConsumerKeyRequest) returns (Response) {}
+  rpc Encrypt(CardRequest) returns (KeyResponse) {}
 }
 
 message Request {
@@ -21,6 +22,16 @@ message Request {
   string TerminalID = 2;
   string ClientID = 3;
   int32 STAN = 4;
+}
+
+message CardRequest {
+    string Ipin = 1;
+    string Key = 2;
+    string Uuid = 3;
+}
+
+message KeyResponse {
+    string IPin = 1;
 }
 
 

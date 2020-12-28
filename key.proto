@@ -13,6 +13,7 @@ service PaymentAPI {
   rpc GetWorkingKey(Request) returns (Response) {}
   rpc GetPurchase(PurchaseRequest) returns (Response) {}
   rpc GetSpecialPayment(SpecialPaymentRequest) returns (Response) {}
+  rpc GetConsumerKey(ConsumerKeyRequest) returns (Response) {}
 }
 
 message Request {
@@ -22,6 +23,13 @@ message Request {
   int32 STAN = 4;
 }
 
+
+message ConsumerKeyRequest {
+    string UUID = 1;
+    string Datetime = 2;
+    string ApplicationID = 3;
+
+}
 
 message PurchaseRequest {
   string TranDateTime = 1;
@@ -52,5 +60,6 @@ message Response {
   string WorkingKey = 1;
   int32 ResponseCode = 2;
   string ResponseMessage = 3;
+  string PubKey = 4;
 }
 

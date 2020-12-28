@@ -21,6 +21,7 @@ type PaymentAPIClient interface {
 	GetWorkingKey(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	GetPurchase(ctx context.Context, in *PurchaseRequest, opts ...grpc.CallOption) (*Response, error)
 	GetSpecialPayment(ctx context.Context, in *SpecialPaymentRequest, opts ...grpc.CallOption) (*Response, error)
+	GetConsumerKey(ctx context.Context, in *ConsumerKeyRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
 type paymentAPIClient struct {
@@ -58,6 +59,15 @@ func (c *paymentAPIClient) GetSpecialPayment(ctx context.Context, in *SpecialPay
 	return out, nil
 }
 
+func (c *paymentAPIClient) GetConsumerKey(ctx context.Context, in *ConsumerKeyRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/noebs_rpc.PaymentAPI/GetConsumerKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentAPIServer is the server API for PaymentAPI service.
 // All implementations must embed UnimplementedPaymentAPIServer
 // for forward compatibility
@@ -66,6 +76,7 @@ type PaymentAPIServer interface {
 	GetWorkingKey(context.Context, *Request) (*Response, error)
 	GetPurchase(context.Context, *PurchaseRequest) (*Response, error)
 	GetSpecialPayment(context.Context, *SpecialPaymentRequest) (*Response, error)
+	GetConsumerKey(context.Context, *ConsumerKeyRequest) (*Response, error)
 	mustEmbedUnimplementedPaymentAPIServer()
 }
 
@@ -81,6 +92,9 @@ func (UnimplementedPaymentAPIServer) GetPurchase(context.Context, *PurchaseReque
 }
 func (UnimplementedPaymentAPIServer) GetSpecialPayment(context.Context, *SpecialPaymentRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSpecialPayment not implemented")
+}
+func (UnimplementedPaymentAPIServer) GetConsumerKey(context.Context, *ConsumerKeyRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConsumerKey not implemented")
 }
 func (UnimplementedPaymentAPIServer) mustEmbedUnimplementedPaymentAPIServer() {}
 
@@ -149,6 +163,24 @@ func _PaymentAPI_GetSpecialPayment_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentAPI_GetConsumerKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConsumerKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentAPIServer).GetConsumerKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/noebs_rpc.PaymentAPI/GetConsumerKey",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentAPIServer).GetConsumerKey(ctx, req.(*ConsumerKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentAPI_ServiceDesc is the grpc.ServiceDesc for PaymentAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -167,6 +199,10 @@ var PaymentAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSpecialPayment",
 			Handler:    _PaymentAPI_GetSpecialPayment_Handler,
+		},
+		{
+			MethodName: "GetConsumerKey",
+			Handler:    _PaymentAPI_GetConsumerKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

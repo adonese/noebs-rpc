@@ -170,5 +170,5 @@ var PaymentAPI_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "key/key.proto",
+	Metadata: "key.proto",
 }
